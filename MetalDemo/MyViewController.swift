@@ -14,9 +14,12 @@ enum Colors {
 
 class MyViewController:UIViewController,MTKViewDelegate{
     var vetices : [Float] = [
-        0,0,0,
+        -1,1,0,
         -1,-1,0,
-        1,-1,0
+        1,-1,0,
+        1,-1,0,
+        1,1,0,
+        -1,1,0
     ]
     var metalView:MTKView{
         return view as! MTKView
@@ -31,16 +34,16 @@ class MyViewController:UIViewController,MTKViewDelegate{
         device = metalView.device //设置到controller的成员变量中
         metalView.clearColor = Colors.wenderlichGreen //设置背景颜色
         commandQueue = device.makeCommandQueue() //为gpu准备指令队列
-        vetextBuffer = device.makeBuffer(bytes: vetices, length: vetices.count * MemoryLayout<Float>.size, options: [])
-        let library = device.makeDefaultLibrary()
-        let vertex_shader = library?.makeFunction(name: "vertex_shader")
-        let fragment_shader = library?.makeFunction(name: "fragment_shader")
-        let piplineDescriptor = MTLRenderPipelineDescriptor();
-        piplineDescriptor.vertexFunction = vertex_shader
-        piplineDescriptor.fragmentFunction = fragment_shader
-        piplineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        vetextBuffer = device.makeBuffer(bytes: vetices, length: vetices.count * MemoryLayout<Float>.size, options: []) //定点存储的位置
+        let library = device.makeDefaultLibrary()//框架会自动找到项目中的Metal文件
+        let vertex_shader = library?.makeFunction(name: "vertex_shader")//编译vertex_shader函数
+        let fragment_shader = library?.makeFunction(name: "fragment_shader")//编译fragment_shader函数
+        let piplineDescriptor = MTLRenderPipelineDescriptor();//生成piplinDescriptor
+        piplineDescriptor.vertexFunction = vertex_shader //设置vertex_shader函数
+        piplineDescriptor.fragmentFunction = fragment_shader//设置fragment_shader函数
+        piplineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm //设置颜色格式，这个应该是固定写法
         do {
-            piplineState = try device.makeRenderPipelineState(descriptor: piplineDescriptor)
+            piplineState = try device.makeRenderPipelineState(descriptor: piplineDescriptor)//通过piplineDescript生成piplineState
         } catch let error as NSError {
             print("error \(error.localizedDescription)")
         }
