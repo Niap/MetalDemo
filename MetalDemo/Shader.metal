@@ -8,12 +8,23 @@
 #include <metal_stdlib>
 using namespace metal;
 
+//在Metal中用[[…]]包含的这种变量实际上着色器的内置变量/内置函数
+struct VertexIn{
+    float4 position [[attribute(0)]];//为啥不用float3,那是因为，返回值是float4,不然还需要new一个float4
+    float4 color [[attribute(1)]];
+};
+struct VertexOut{
+    float4 position [[position]];//position 告诉渲染器，这个字段是用作位置信息。
+    float4 color ;
+};
 
-vertex float4 vertex_shader(const device packed_float3 *vertices [[buffer(0)]] ,
-                            uint vertexId [[vertex_id]] ){
-    return float4(vertices[vertexId],1);
+vertex VertexOut vertex_shader(const VertexIn  vertexIn [[stage_in]] ){
+    VertexOut vertexOut;
+    vertexOut.position = vertexIn.position;
+    vertexOut.color = vertexIn.color;
+    return vertexOut;
 }
 
-fragment half4 fragment_shader(){
-    return half4(1,0,0,1);
+fragment half4 fragment_shader(const VertexOut  vertexIn [[stage_in]]){
+    return half4(vertexIn.color);
 }
