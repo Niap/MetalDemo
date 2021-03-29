@@ -35,6 +35,7 @@ class MyViewController:UIViewController,MTKViewDelegate{
     var vetextBuffer:MTLBuffer!
     var indexBuffer:MTLBuffer!
     var piplineState:MTLRenderPipelineState!
+    var time:Float = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         metalView.device = MTLCreateSystemDefaultDevice()// 创建设备
@@ -63,7 +64,8 @@ class MyViewController:UIViewController,MTKViewDelegate{
         guard let pState = piplineState else {
             return
         }
-        constants.animateBy = 1
+        time += 1 / Float(view.preferredFramesPerSecond) //60fps
+        constants.animateBy = abs(sin(time)/2 + 0.5)
         let commandBuffer = commandQueue.makeCommandBuffer() //为指令队列设置缓冲区
         let commandEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: metalView.currentRenderPassDescriptor!) //为缓冲区创建一个编码器
         commandEncoder?.setRenderPipelineState(pState);
