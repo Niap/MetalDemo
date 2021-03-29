@@ -11,9 +11,6 @@ import MetalKit
 enum Colors {
     static let wenderlichGreen = MTLClearColor(red:0.0,green: 0.4,blue: 0.21,alpha: 1.0)
 }
-struct Constants {
-    var animateBy:Float = 0.0
-}
 
 class MyViewController:UIViewController,MTKViewDelegate{
     var vetices : [Float] = [
@@ -26,7 +23,6 @@ class MyViewController:UIViewController,MTKViewDelegate{
         0,1,2,
         2,3,0
     ]
-    var constants = Constants()
     var metalView:MTKView{
         return view as! MTKView
     }
@@ -35,7 +31,6 @@ class MyViewController:UIViewController,MTKViewDelegate{
     var vetextBuffer:MTLBuffer!
     var indexBuffer:MTLBuffer!
     var piplineState:MTLRenderPipelineState!
-    var time:Float = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         metalView.device = MTLCreateSystemDefaultDevice()// 创建设备
@@ -64,14 +59,10 @@ class MyViewController:UIViewController,MTKViewDelegate{
         guard let pState = piplineState else {
             return
         }
-        time += 1 / Float(view.preferredFramesPerSecond) //60fps
-        constants.animateBy = abs(sin(time)/2 + 0.5)
         let commandBuffer = commandQueue.makeCommandBuffer() //为指令队列设置缓冲区
         let commandEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: metalView.currentRenderPassDescriptor!) //为缓冲区创建一个编码器
         commandEncoder?.setRenderPipelineState(pState);
         commandEncoder?.setVertexBuffer(vetextBuffer, offset: 0, index: 0)
-        commandEncoder?.setVertexBytes(&constants, length: MemoryLayout<Constants>.stride, index: 1)
-        //commandEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vetices.count)
         commandEncoder?.drawIndexedPrimitives(type: .triangle, indexCount: indices.count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
         commandEncoder?.endEncoding()//停止编码
         commandBuffer?.present(metalView.currentDrawable as! MTLDrawable) //绘制图像
