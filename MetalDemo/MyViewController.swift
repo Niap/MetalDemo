@@ -71,7 +71,7 @@ class MyViewController:UIViewController,MTKViewDelegate{
         commandEncoder?.setRenderPipelineState(pState);
         commandEncoder?.setVertexBuffer(vetextBuffer, offset: 0, index: 0)
         commandEncoder?.setVertexBytes(&constants, length: MemoryLayout<Constants>.stride, index: 1)
-        commandEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vetices.count)
+        //commandEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vetices.count)
         commandEncoder?.drawIndexedPrimitives(type: .triangle, indexCount: indices.count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
         commandEncoder?.endEncoding()//停止编码
         commandBuffer?.present(metalView.currentDrawable as! MTLDrawable) //绘制图像
