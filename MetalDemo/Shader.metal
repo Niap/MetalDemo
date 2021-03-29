@@ -8,8 +8,16 @@
 #include <metal_stdlib>
 using namespace metal;
 
-vertex float4 vertex_shader(const device packed_float3 *vertices [[buffer(0)]] ,uint vertexId [[vertex_id]] ){
-    return float4(vertices[vertexId],1);
+struct Constants{
+    float animate_by;
+};
+
+vertex float4 vertex_shader(const device packed_float3 *vertices [[buffer(0)]] ,
+                            constant Constants &constants [[buffer(1)]],
+                            uint vertexId [[vertex_id]] ){
+    float4 pos = float4(vertices[vertexId],1);
+    pos.x += constants.animate_by;
+    return pos;
 }
 
 fragment half4 fragment_shader(){
