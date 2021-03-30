@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CEA920E32611F2B700BB360D /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEA920E22611F2B700BB360D /* logo.jpg */; };
 		CEA92970260E2590008CBF00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA9296F260E2590008CBF00 /* AppDelegate.swift */; };
 		CEA92976260E2591008CBF00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEA92975260E2591008CBF00 /* Assets.xcassets */; };
 		CEA92979260E2591008CBF00 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEA92978260E2591008CBF00 /* Preview Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CEA920E22611F2B700BB360D /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		CEA9296C260E2590008CBF00 /* MetalDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEA9296F260E2590008CBF00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEA92975260E2591008CBF00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 		CEA9296E260E2590008CBF00 /* MetalDemo */ = {
 			isa = PBXGroup;
 			children = (
+				CEA920E22611F2B700BB360D /* logo.jpg */,
 				CEA9296F260E2590008CBF00 /* AppDelegate.swift */,
 				CEA92975260E2591008CBF00 /* Assets.xcassets */,
 				CEA9297A260E2591008CBF00 /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEA9297C260E2591008CBF00 /* LaunchScreen.storyboard in Resources */,
+				CEA920E32611F2B700BB360D /* logo.jpg in Resources */,
 				CEA92979260E2591008CBF00 /* Preview Assets.xcassets in Resources */,
 				CEA92976260E2591008CBF00 /* Assets.xcassets in Resources */,
 				CEA92985260E284E008CBF00 /* main.storyboard in Resources */,

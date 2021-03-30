@@ -15,14 +15,15 @@ enum Colors {
 struct Vertex {
     var position:float3
     var color:float4
+    var texture:float2
 }
 
 class MyViewController:UIViewController,MTKViewDelegate{
     var vetices : [Vertex] = [
-        Vertex(position: float3(-1,1,0), color: float4(1,0,0,1)),
-        Vertex(position: float3(-1,-1,0), color: float4(0,1,0,1)),
-        Vertex(position: float3(1,-1,0), color: float4(0,0,1,1)),
-        Vertex(position: float3(1,1,0), color: float4(1,0,1,1))
+        Vertex(position: float3(-1,1,0), color: float4(1,0,0,1),texture: float2(0,1)),
+        Vertex(position: float3(-1,-1,0), color: float4(0,1,0,1),texture: float2(0,0)),
+        Vertex(position: float3(1,-1,0), color: float4(0,0,1,1),texture: float2(1,0)),
+        Vertex(position: float3(1,1,0), color: float4(1,0,1,1),texture: float2(1,1))
     ]
     var indices:[UInt16] = [
         0,1,2,
@@ -36,6 +37,7 @@ class MyViewController:UIViewController,MTKViewDelegate{
     var vetextBuffer:MTLBuffer!
     var indexBuffer:MTLBuffer!
     var piplineState:MTLRenderPipelineState!
+    var texure:MTLTexture!
     override func viewDidLoad() {
         super.viewDidLoad()
         metalView.device = MTLCreateSystemDefaultDevice()// 创建设备
@@ -58,8 +60,21 @@ class MyViewController:UIViewController,MTKViewDelegate{
         vertexDescriptor.attributes[1].format = .float4
         vertexDescriptor.attributes[1].offset = MemoryLayout<float3>.stride
         vertexDescriptor.attributes[1].bufferIndex = 0;
+        vertexDescriptor.attributes[2].format = .float2
+        vertexDescriptor.attributes[2].offset = MemoryLayout<float3>.stride+MemoryLayout<float4>.stride
+        vertexDescriptor.attributes[2].bufferIndex = 0;
         vertexDescriptor.layouts[0].stride = MemoryLayout<Vertex>.stride
         piplineDescriptor.vertexDescriptor = vertexDescriptor
+        //load texture
+        let textureLoader = MTKTextureLoader(device: device);
+        if  let textureURL = Bundle.main.url(forResource: "logo.jpg", withExtension: nil){
+            do {
+                try texure = textureLoader.newTexture(URL: textureURL, options: [.origin: MTKTextureLoader.Origin.bottomLeft])
+            } catch  {
+                print("texure load error")
+            }
+        }
+        
         do {
             piplineState = try device.makeRenderPipelineState(descriptor: piplineDescriptor)//通过piplineDescript生成piplineState
         } catch let error as NSError {
@@ -77,6 +92,7 @@ class MyViewController:UIViewController,MTKViewDelegate{
         let commandEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: metalView.currentRenderPassDescriptor!) //为缓冲区创建一个编码器
         commandEncoder?.setRenderPipelineState(pState);
         commandEncoder?.setVertexBuffer(vetextBuffer, offset: 0, index: 0)
+        commandEncoder?.setFragmentTexture(texure, index: 0)
         commandEncoder?.drawIndexedPrimitives(type: .triangle, indexCount: indices.count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
         commandEncoder?.endEncoding()//停止编码
         commandBuffer?.present(metalView.currentDrawable as! MTLDrawable) //绘制图像
